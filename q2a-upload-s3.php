@@ -7,7 +7,7 @@ class q2a_upload_s3 {
 	{
 		switch($option) {
 			case 'q2a_upload_s3_enabled':
-				return 1; // true
+				return 0; // false
 			default:
 				return null;
 		}
@@ -42,25 +42,25 @@ class q2a_upload_s3 {
 		$fields[] = array(
 			'type' => 'checkbox',
 			'label' => qa_lang('q2a_upload_s3_lang/enable_plugin'),
-			'tags' => 'NAME="q2a_upload_s3_enabled"',
-			'value' => qa_opt('q2a_upload_s3_enabled'),
+			'tags' => 'NAME="'.US3_ENABLED.'"',
+			'value' => qa_opt(US3_ENABLED),
 		);
 
 		$fields[] = array(
 			'type' => 'input',
 			'label' => qa_lang('q2a_upload_s3_lang/aws_access_key_id'),
-			'tags' => 'name="q2a_upload_s3_access_key_id"',
-			'value' => qa_opt('q2a_upload_s3_access_key_id'),
+			'tags' => 'name="'.US3_AWS_ID.'"',
+			'value' => qa_opt(US3_AWS_ID),
 		);
 
 		$fields[] = array(
 			'type' => 'input',
 			'label' => qa_lang('q2a_upload_s3_lang/aws_secret_access_key'),
-			'tags' => 'name="q2a_upload_s3_secret_access_key"',
-			'value' => qa_opt('q2a_upload_s3_secret_access_key'),
+			'tags' => 'name="'.US3_AWS_SECRET.'"',
+			'value' => qa_opt(US3_AWS_SECRET),
 		);
 
-		$s3_region = qa_opt('q2a_upload_s3_region'); // xhtml or bbcode
+		$s3_region = qa_opt(US3_S3_REGION); // xhtml or bbcode
 		$region_options = array(
 			'us-east-1' => 'US East (N. Virginia)',
 			'us-west-2' => 'US West (Oregon)',
@@ -77,7 +77,7 @@ class q2a_upload_s3 {
 		$fields[] = array(
 			'type' => 'select',
 			'label' => qa_lang('q2a_upload_s3_lang/s3_region'),
-			'tags' => 'name="q2a_upload_s3_region"',
+			'tags' => 'name="'.US3_S3_REGION.'"',
 			'options' => $region_options,
 			'value' => $region_options[$s3_region],
 		);
@@ -85,8 +85,8 @@ class q2a_upload_s3 {
 		$fields[] = array(
 			'type' => 'input',
 			'label' => qa_lang('q2a_upload_s3_lang/s3_bucket'),
-			'tags' => 'name="q2a_upload_s3_bucket"',
-			'value' => qa_opt('q2a_upload_s3_bucket'),
+			'tags' => 'name="'.US3_S3_BUCKET.'"',
+			'value' => qa_opt(US3_S3_BUCKET),
 		);
 
 		return array(
