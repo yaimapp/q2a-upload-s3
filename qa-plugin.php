@@ -18,7 +18,14 @@ if (!defined('QA_VERSION')) { // don't allow this page to be requested directly 
 	exit;
 }
 
-// // admin
-// qa_register_plugin_module('module', 'qa-upload-s3.php', 'qa_upload_s3', 'Upload S3');
+if (!defined('QA_BLOBS_DIRECTORY')) {
+	define('QA_BLOBS_DIRECTORY', QA_BASE_DIR .'qa-uploads');
+}
+
+// language file
+qa_register_plugin_phrases('q2a-upload-s3-lang-*.php', 'q2a_upload_s3_lang');
+
+// admin
+qa_register_plugin_module('module', 'q2a-upload-s3.php', 'q2a_upload_s3', 'Upload S3');
 // // override
 // qa_register_plugin_overrides('qa-upload-s3-overrides.php');
