@@ -34,5 +34,6 @@ qa_register_plugin_phrases('q2a-upload-s3-lang-*.php', 'q2a_upload_s3_lang');
 
 // admin
 qa_register_plugin_module('module', 'q2a-upload-s3.php', 'q2a_upload_s3', 'Upload S3');
-// // override
-// qa_register_plugin_overrides('qa-upload-s3-overrides.php');
+
+// override
+qa_register_plugin_overrides('q2a-upload-s3-overrides.php');
