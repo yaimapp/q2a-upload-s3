@@ -7,8 +7,8 @@
 		'enable_plugin' => 'プラグインを有効にする',
 		'aws_access_key_id' => 'AWS アクセスキーID:',
 		'aws_secret_access_key' => 'AWS シークレットアクセスキー:',
-		'aws_region' => 'AWS リージョン:',
-		'aws_bucket' => 'バケット名',
+		's3_region' => 'S3 リージョン:',
+		's3_bucket' => 'S3 バケット名',
 	);
 
 
