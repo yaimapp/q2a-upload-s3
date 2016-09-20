@@ -35,6 +35,11 @@ class q2a_upload_s3 {
 		$fields = array();
 
 		$fields[] = array(
+			'type' => 'static',
+			'label' => qa_lang('q2a_upload_s3_lang/need_plugin'),
+ 		);
+
+		$fields[] = array(
 			'type' => 'checkbox',
 			'label' => qa_lang('q2a_upload_s3_lang/enable_plugin'),
 			'tags' => 'NAME="q2a_upload_s3_enabled"',
