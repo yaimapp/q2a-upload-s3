@@ -33,11 +33,16 @@ function is_s3_enabled()
 				'secret' => qa_opt(US3_AWS_SECRET),
 				'region' => qa_opt(US3_S3_REGION),
 			));
+			// 接続確認、アップロードしておいたファイルをゲットしてみる
+			$result = $s3->getObject(array(
+				'Bucket' => qa_opt(US3_S3_BUCKET),
+				'Key'    => 'connection'
+			));
 
 			$s3->registerStreamWrapper();
 
-		} catch (S3Exception $e) {
-			error_log($e->getMessage());
+		} catch (Aws\S3\Exception\S3Exception $e) {
+			error_log('s3 wrapper failed :'. $e->getMessage());
 			return false;
 		}
 		return true;
@@ -47,20 +52,18 @@ function is_s3_enabled()
 
 function qa_write_blob_file($blobid, $content, $format)
 {
-	$written=false;
+	$written = false;
 
-	if (is_s3_enabled()) {
+	try {
+		if (is_s3_enabled()) {
 
-		try {
 			date_default_timezone_set("Asia/Tokyo");
-			// $directory = s3_get_blob_directory($blobid);
 
 			$filename = s3_get_blob_filename($blobid, $format);
 
-			$file=fopen($filename, 'xb');
-			if (is_resource($file)) {
-				if (fwrite($file, $content)>=strlen($content))
-					$written=true;
+			if ($file = fopen($filename, 'xb')) {
+				if (fwrite($file, $content) >= strlen($content))
+					$written = true;
 
 				fclose($file);
 
@@ -68,11 +71,10 @@ function qa_write_blob_file($blobid, $content, $format)
 					unlink($filename);
 			}
 
-		} catch (S3Exception $e) {
-			error_log($e->getMessage());
-			$written = false;
 		}
-		$s3 = null;
+	} catch (Exception $e) {
+		error_log('s3 write failed : ' . $e->getMessage());
+		$written = false;
 	}
 
 	if (!$written) {
@@ -100,16 +102,17 @@ function qa_write_blob_file($blobid, $content, $format)
 function qa_read_blob_file($blobid, $format)
 {
 	$contents = null;
-	if (is_s3_enabled()) {
-		try {
-			$filename = s3_get_blob_filename($blobid, $format);
-			if (is_readable($filename)) {
-				$contents = file_get_contents($filename);
-			}
-		} catch (S3Exception $e) {
-			error_log($e->getMessage());
-			$contents = null;
+	try {
+		if (is_s3_enabled()) {
+				$filename = s3_get_blob_filename($blobid, $format);
+				if (is_readable($filename)) {
+					$contents = file_get_contents($filename);
+				}
+
 		}
+	} catch (Exception $e) {
+		error_log('s3 read failed : ' . $e->getMessage());
+		$contents = null;
 	}
 
 	if (isset($contents)) {

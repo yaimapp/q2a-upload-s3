@@ -1,7 +1,7 @@
 <?php
 
 /*
-	Plugin Name: Upload S3 Plugin
+	Plugin Name: Upload S3
 	Plugin URI:
 	Plugin Description: Image file save Amzaon S3.
 	Plugin Version: 1.0
