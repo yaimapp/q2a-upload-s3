@@ -22,17 +22,21 @@ function s3_get_blob_filename($blobid, $format)
 // S3クライアント取得
 function get_s3_client()
 {
+	$aws_id = qa_opt(US3_AWS_ID);
+	$aws_secret = qa_opt(US3_AWS_SECRET);
+	$aws_s3_region = qa_opt(US3_S3_REGION);
+	$aws_s3_bucket = qa_opt(US3_S3_BUCKET);
 	if (qa_opt(US3_ENABLED)
-		&& !empty(qa_opt(US3_AWS_ID))
-		&& !empty(qa_opt(US3_AWS_SECRET))
-		&& !empty(qa_opt(US3_S3_REGION))
-		&& !empty(qa_opt(US3_S3_BUCKET)) ) {
+		&& !empty($aws_id)
+		&& !empty($aws_secret)
+		&& !empty($aws_s3_region)
+		&& !empty($aws_s3_bucket) ) {
 
 		try {
 			$s3 = Aws\S3\S3Client::factory(array(
-				'key'    => qa_opt(US3_AWS_ID),
-				'secret' => qa_opt(US3_AWS_SECRET),
-				'region' => qa_opt(US3_S3_REGION),
+				'key'    => $aws_id,
+				'secret' => $aws_secret,
+				'region' => $aws_s3_region,
 			));
 
 			// $s3->registerStreamWrapper();
