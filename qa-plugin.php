@@ -22,7 +22,6 @@ if (!defined('QA_BLOBS_DIRECTORY')) {
 	define('QA_BLOBS_DIRECTORY', QA_BASE_DIR .'qa-uploads');
 }
 
-define('US3_ENABLED', 'q2a_upload_s3_enabled');
 define('US3_AWS_ID', 'q2a_upload_s3_access_key_id');
 define('US3_AWS_SECRET', 'q2a_upload_s3_secret_access_key');
 define('US3_S3_REGION', 'q2a_upload_s3_region');
