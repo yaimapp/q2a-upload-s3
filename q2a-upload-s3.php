@@ -5,12 +5,7 @@ class q2a_upload_s3 {
 	// option's value is requested but the option has not yet been set
 	function option_default($option)
 	{
-		switch($option) {
-			case 'q2a_upload_s3_enabled':
-				return 0; // false
-			default:
-				return null;
-		}
+		return null;
 	}
 
 	function allow_template($template)
@@ -23,7 +18,6 @@ class q2a_upload_s3 {
 		// process the admin form if admin hit Save-Changes-button
 		$ok = null;
 		if (qa_clicked('q2a_upload_s3_save')) {
-			qa_opt('q2a_upload_s3_enabled', (bool)qa_post_text('q2a_upload_s3_enabled')); // empty or 1
 			qa_opt('q2a_upload_s3_access_key_id', qa_post_text('q2a_upload_s3_access_key_id'));
 			qa_opt('q2a_upload_s3_secret_access_key', qa_post_text('q2a_upload_s3_secret_access_key'));
 			qa_opt('q2a_upload_s3_region', qa_post_text('q2a_upload_s3_region'));
@@ -38,13 +32,6 @@ class q2a_upload_s3 {
 			'type' => 'static',
 			'label' => qa_lang('q2a_upload_s3_lang/need_plugin'),
  		);
-
-		$fields[] = array(
-			'type' => 'checkbox',
-			'label' => qa_lang('q2a_upload_s3_lang/enable_plugin'),
-			'tags' => 'NAME="'.US3_ENABLED.'"',
-			'value' => qa_opt(US3_ENABLED),
-		);
 
 		$fields[] = array(
 			'type' => 'input',

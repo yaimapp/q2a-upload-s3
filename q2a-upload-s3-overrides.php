@@ -26,12 +26,7 @@ function get_s3_client()
 	$aws_secret = qa_opt(US3_AWS_SECRET);
 	$aws_s3_region = qa_opt(US3_S3_REGION);
 	$aws_s3_bucket = qa_opt(US3_S3_BUCKET);
-	if (qa_opt(US3_ENABLED)
-		&& !empty($aws_id)
-		&& !empty($aws_secret)
-		&& !empty($aws_s3_region)
-		&& !empty($aws_s3_bucket) ) {
-
+	if (!empty($aws_id) && !empty($aws_secret) && !empty($aws_s3_region) && !empty($aws_s3_bucket) ) {
 		try {
 			$s3 = Aws\S3\S3Client::factory(array(
 				'key'    => $aws_id,
@@ -56,6 +51,7 @@ function qa_write_blob_file($blobid, $content, $format)
 
 	try {
 		$s3 = get_s3_client();
+
 		if ($s3) {
 
 			$filename = s3_get_blob_filename($blobid, $format);
@@ -69,16 +65,6 @@ function qa_write_blob_file($blobid, $content, $format)
 			if ($result['ObjectURL']) {
 				$written = true;
 			}
-			// if ($file = fopen($filename, 'xb')) {
-			// 	if (fwrite($file, $content) >= strlen($content))
-			// 		$written = true;
-			//
-			// 	fclose($file);
-			//
-			// 	if (!$written)
-			// 		unlink($filename);
-			// }
-
 		}
 		$s3 = null;
 	} catch (Aws\S3\Exception\S3Exception $e) {
