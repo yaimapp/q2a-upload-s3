@@ -99,23 +99,28 @@ function qa_read_blob_file($blobid, $format)
 {
 	$contents = null;
 	try {
-		$s3 = get_s3_client();
-		if ($s3) {
-			$filename = s3_get_blob_filename($blobid, $format);
-			$result = $s3->getObject(array(
-				'Bucket' => qa_opt(US3_S3_BUCKET),
-				'Key'    => $filename,
-			));
-			if (isset($result['Body'])) {
-				$contents = $result['Body'];
-			}
+		$imgurl = qa_opt(US3_S3_IMGURL);
+		$filename = s3_get_blob_filename($blobid, $format);
 
-			// if (is_readable($filename)) {
-			// 	$contents = file_get_contents($filename);
-			// }
+		// URLを指定して画像を読み込む
+		$contents = file_get_contents($imgurl.$filename);
+
+		if (!$contents) {
+			$s3 = get_s3_client();
+
+			if ($s3) {
+				// まだ画像を読み込めていない場合はAPIを使用する
+				$result = $s3->getObject(array(
+					'Bucket' => qa_opt(US3_S3_BUCKET),
+					'Key'    => $filename,
+				));
+				if (isset($result['Body'])) {
+					$contents = $result['Body'];
+				}
+			}
+			$s3 = null;
 
 		}
-		$s3 = null;
 	} catch (Aws\S3\Exception\S3Exception $e) {
 		error_log('s3 download failed : ' . $e->getMessage());
 		error_log('file: '. $filename);
@@ -132,4 +137,33 @@ function qa_read_blob_file($blobid, $format)
 		else
 			return null;
 	}
+}
+
+/*
+ * 画像のURLを返す
+ * CloudFront対応版
+ */
+function qa_get_blob_url($blobid, $absolute=false)
+{
+	$imgurlbase = qa_opt(US3_S3_IMGURL);
+	if ($imgurlbase) {
+		$format = get_blob_format($blobid);
+		$filename = s3_get_blob_filename($blobid, $format);
+		$imgurl = $imgurlbase.$filename;
+		return $imgurl;
+	} else {
+		return qa_get_blob_url_base($blobid, $absolute);
+	}
+}
+
+/*
+ * 画像のフォーマットを返す
+ */
+function get_blob_format($blobid)
+{
+	$sql = "SELECT format FROM ^blobs";
+	$sql .= " WHERE blobid = #";
+	$result = qa_db_query_sub($sql, $blobid);
+	$value = qa_db_read_one_value($result, true);
+	return $value;
 }
