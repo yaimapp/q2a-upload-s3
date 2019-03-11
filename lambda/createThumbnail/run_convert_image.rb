@@ -6,12 +6,12 @@ the_bucket='38qa.net'
 the_function='createThumbnail'
 parallel = 100
 
+count = 0
 result = Benchmark.realtime do
 
   client = Aws::Lambda::Client.new()
   m = Mutex.new
 
-  count = 0
   File.write('done.txt', '')
   Parallel.each(IO.readlines('todo.txt', chomp: true), in_threads: parallel) do |path|
     begin
